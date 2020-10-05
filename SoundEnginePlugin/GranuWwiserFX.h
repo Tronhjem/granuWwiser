@@ -28,6 +28,7 @@ the specific language governing permissions and limitations under the License.
 #define GranuWwiserFX_H
 
 #include "GranuWwiserFXParams.h"
+#include "Buffer.h"
 
 /// See https://www.audiokinetic.com/library/edge/?source=SDK&id=soundengine__plugins__effects.html
 /// for the documentation about effect plug-ins
@@ -65,6 +66,12 @@ private:
     GranuWwiserFXParams* m_pParams;
     AK::IAkPluginMemAlloc* m_pAllocator;
     AK::IAkEffectPluginContext* m_pContext;
+    float* m_writePointerBuffer = nullptr;
+    int m_reSampleThreshold = 3000;
+    int m_windowSize = 200;
+    float m_fadeSize = 50;
+    int* m_currentSampleCount = new int[2]{0};
+    Buffer* m_buffer;
 };
 
 #endif // GranuWwiserFX_H

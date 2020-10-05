@@ -46,10 +46,12 @@ GranuWwiserFX::GranuWwiserFX()
     , m_pAllocator(nullptr)
     , m_pContext(nullptr)
 {
+    m_buffer = new Buffer(48000);
 }
 
 GranuWwiserFX::~GranuWwiserFX()
 {
+    delete m_buffer;
 }
 
 AKRESULT GranuWwiserFX::Init(AK::IAkPluginMemAlloc* in_pAllocator, AK::IAkEffectPluginContext* in_pContext, AK::IAkPluginParam* in_pParams, AkAudioFormat& in_rFormat)
@@ -88,11 +90,34 @@ void GranuWwiserFX::Execute(AkAudioBuffer* io_pBuffer)
     for (AkUInt32 i = 0; i < uNumChannels; ++i)
     {
         AkReal32* AK_RESTRICT pBuf = (AkReal32* AK_RESTRICT)io_pBuffer->GetChannel(i);
+        
+        m_writePointerBuffer = m_buffer->GetWritePointer(i);
 
         uFramesProcessed = 0;
         while (uFramesProcessed < io_pBuffer->uValidFrames)
         {
-            // Execute DSP in-place here
+            if (m_currentSampleCount[i] >= m_reSampleThreshold)
+                m_currentSampleCount[i] = 0;
+
+            // Write initial block to hold to the buffer
+            if (m_currentSampleCount[i] < m_windowSize)
+            {
+                // Fade in
+                if (m_currentSampleCount[i] <= m_fadeSize)
+                    m_writePointerBuffer[uFramesProcessed] = pBuf[uFramesProcessed] * float(m_currentSampleCount[i] / m_fadeSize);
+                // Fade out
+                else if (m_currentSampleCount[i] >= m_windowSize - m_fadeSize)
+                    m_writePointerBuffer[uFramesProcessed] = pBuf[uFramesProcessed] * float((m_windowSize - m_currentSampleCount[i]) / m_fadeSize);
+                else
+                    m_writePointerBuffer[uFramesProcessed] = pBuf[uFramesProcessed];
+            }
+            // play back held sample block from buffer until resample is hit.
+            else if (m_currentSampleCount[i] > m_windowSize && m_currentSampleCount[i] < m_reSampleThreshold)
+            {
+                pBuf[uFramesProcessed] = m_writePointerBuffer[m_currentSampleCount[i] % m_windowSize];
+            }
+
+            m_currentSampleCount[i] += 1;
             ++uFramesProcessed;
         }
     }
