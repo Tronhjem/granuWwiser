@@ -33,8 +33,8 @@ Copyright (c) 2020 Audiokinetic Inc.
 // - In the xml file located in the FactoryAssets directory.
 namespace GranuWwiserConfig
 {
-    static const unsigned short CompanyID = 64;
-    static const unsigned short PluginID = 0;
+    static const unsigned short CompanyID = 65;
+    static const unsigned short PluginID = 1;
 }
 
 #endif // GranuWwiserConfig_H

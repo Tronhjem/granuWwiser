@@ -69,7 +69,7 @@ private:
     float* m_writePointerBuffer = nullptr;
     int m_reSampleThreshold = 3000;
     int m_windowSize = 200;
-    float m_fadeSize = 50;
+    float m_fadeSize = 100;
     int* m_currentSampleCount = new int[2]{0};
     Buffer* m_buffer;
 };

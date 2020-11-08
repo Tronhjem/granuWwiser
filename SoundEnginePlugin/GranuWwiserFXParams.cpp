@@ -53,7 +53,8 @@ AKRESULT GranuWwiserFXParams::Init(AK::IAkPluginMemAlloc* in_pAllocator, const v
     if (in_ulBlockSize == 0)
     {
         // Initialize default parameters here
-        RTPC.fDummy = 0.0f;
+        RTPC.fWindowSize = 500;
+        RTPC.fSampleRetrigger = 15000;
         m_paramChangeHandler.SetAllParamChanges();
         return AK_Success;
     }
@@ -73,7 +74,8 @@ AKRESULT GranuWwiserFXParams::SetParamsBlock(const void* in_pParamsBlock, AkUInt
     AkUInt8* pParamsBlock = (AkUInt8*)in_pParamsBlock;
 
     // Read bank data here
-    RTPC.fDummy = READBANKDATA(AkReal32, pParamsBlock, in_ulBlockSize);
+    RTPC.fWindowSize = READBANKDATA(AkReal32, pParamsBlock, in_ulBlockSize);
+    RTPC.fSampleRetrigger = READBANKDATA(AkReal32, pParamsBlock, in_ulBlockSize);
     CHECKBANKDATASIZE(in_ulBlockSize, eResult);
     m_paramChangeHandler.SetAllParamChanges();
 
@@ -87,9 +89,13 @@ AKRESULT GranuWwiserFXParams::SetParam(AkPluginParamID in_paramID, const void* i
     // Handle parameter change here
     switch (in_paramID)
     {
-    case PARAM_DUMMY_ID:
-        RTPC.fDummy = *((AkReal32*)in_pValue);
-        m_paramChangeHandler.SetParamChange(PARAM_DUMMY_ID);
+    case WINDOW_SIZE:
+        RTPC.fWindowSize = *((AkReal32*)in_pValue);
+        m_paramChangeHandler.SetParamChange(WINDOW_SIZE);
+        break;
+    case SAMPLE_RETRIGGER:
+        RTPC.fSampleRetrigger = *((AkReal32*)in_pValue);
+        m_paramChangeHandler.SetParamChange(SAMPLE_RETRIGGER);
         break;
     default:
         eResult = AK_InvalidParameter;

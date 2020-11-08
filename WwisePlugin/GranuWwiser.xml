@@ -29,7 +29,7 @@ See https://www.audiokinetic.com/library/edge/?source=SDK&id=plugin__xml.html
 for the documentation about the plugin xml format
 -->
 <PluginModule>
-  <EffectPlugin Name="GranuWwiser" CompanyID="64" PluginID="0">
+  <EffectPlugin Name="GranuWwiser" CompanyID="65" PluginID="1">
     <PluginInfo>
       <PlatformSupport>
         <Platform Name="Any">
@@ -41,15 +41,28 @@ for the documentation about the plugin xml format
     </PluginInfo>
     <Properties>
       <!-- Add your property definitions here -->
-      <Property Name="Dummy" Type="Real32" SupportRTPCType="Exclusive" DisplayName="Dummy">
-        <UserInterface Step="0.1" Fine="0.001" Decimals="3" UIMax="10" />
-        <DefaultValue>0.0</DefaultValue>
+      <Property Name="windowSize" Type="Real32" SupportRTPCType="Exclusive" DisplayName="Window Size">
+        <UserInterface Step="1" Fine="1" Decimals="1" UIMax="48000" />
+        <DefaultValue>1</DefaultValue>
         <AudioEnginePropertyID>0</AudioEnginePropertyID>
         <Restrictions>
           <ValueRestriction>
             <Range Type="Real32">
-              <Min>0.001</Min>
-              <Max>1000</Max>
+              <Min>1</Min>
+              <Max>48000</Max>
+            </Range>
+          </ValueRestriction>
+        </Restrictions>
+      </Property>
+      <Property Name="sampleRetrigger" Type="Real32" SupportRTPCType="Exclusive" DisplayName="Sample Retrigger">
+        <UserInterface Step="1" Fine="1" Decimals="1" UIMax="48000" />
+        <DefaultValue>1</DefaultValue>
+        <AudioEnginePropertyID>1</AudioEnginePropertyID>
+        <Restrictions>
+          <ValueRestriction>
+            <Range Type="Real32">
+              <Min>1</Min>
+              <Max>48000</Max>
             </Range>
           </ValueRestriction>
         </Restrictions>

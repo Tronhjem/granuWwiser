@@ -46,7 +46,7 @@ GranuWwiserFX::GranuWwiserFX()
     , m_pAllocator(nullptr)
     , m_pContext(nullptr)
 {
-    m_buffer = new Buffer(48000);
+    
 }
 
 GranuWwiserFX::~GranuWwiserFX()
@@ -59,7 +59,8 @@ AKRESULT GranuWwiserFX::Init(AK::IAkPluginMemAlloc* in_pAllocator, AK::IAkEffect
     m_pParams = (GranuWwiserFXParams*)in_pParams;
     m_pAllocator = in_pAllocator;
     m_pContext = in_pContext;
-
+    float secondsOfBufferTime = 2;
+    m_buffer = new Buffer(int(secondsOfBufferTime * in_rFormat.uSampleRate));
     return AK_Success;
 }
 
@@ -96,6 +97,9 @@ void GranuWwiserFX::Execute(AkAudioBuffer* io_pBuffer)
         uFramesProcessed = 0;
         while (uFramesProcessed < io_pBuffer->uValidFrames)
         {
+            m_windowSize = m_pParams->RTPC.fWindowSize;
+            m_reSampleThreshold = m_pParams->RTPC.fSampleRetrigger;
+
             if (m_currentSampleCount[i] >= m_reSampleThreshold)
                 m_currentSampleCount[i] = 0;
 
