@@ -24,9 +24,6 @@ the specific language governing permissions and limitations under the License.
   Copyright (c) 2020 Audiokinetic Inc.
 ------------------------------------------------------------------------------]]
 
-if not _AK_PREMAKE then
-    error('You must use the custom Premake5 scripts by adding the following parameter: --scripts="Scripts\\Premake"', 1)
-end
 
 local Plugin = {}
 Plugin.name = "GranuWwiser"
@@ -46,6 +43,9 @@ Plugin.sdk.static.files = -- https://github.com/premake/premake-core/wiki/files
     "GranuWwiserFX.h",
     "GranuWwiserFXParams.cpp",
     "GranuWwiserFXParams.h",
+    "Buffer.cpp",
+    "Buffer.h"
+
 }
 Plugin.sdk.static.excludes = -- https://github.com/premake/premake-core/wiki/removefiles
 {

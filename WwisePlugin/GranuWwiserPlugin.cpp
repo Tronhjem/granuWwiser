@@ -52,7 +52,8 @@ bool GranuWwiserPlugin::GetBankParameters(const GUID& in_guidPlatform, AK::Wwise
 {
     // Write bank data here
     CComVariant varProp;
-    m_pPSet->GetValue(in_guidPlatform, L"Dummy", varProp);
+    m_pPSet->GetValue(in_guidPlatform, L"windowSize", varProp);
+    m_pPSet->GetValue(in_guidPlatform, L"sampleRetrigger", varProp);
     in_pDataWriter->WriteReal32(varProp.fltVal);
 
     return true;
